@@ -12,25 +12,6 @@
       new BinaryTree(value, Option(leftSubTree.add(newValue)), right)
   }
 
-  def inOrder(): Unit = this match {
-    case BinaryTree(value, None, None) => {
-      println(this.value)
-    }
-    case BinaryTree(value, Some(leftSubTree), None) => {
-      leftSubTree.inOrder()
-      println(this.value)
-    }
-    case BinaryTree(value, None, Some(rightSubTree)) => {
-      println(this.value)
-      rightSubTree.inOrder()
-    }
-    case BinaryTree(value, Some(leftSubTree), Some(rightSubTree)) => {
-      leftSubTree.inOrder()
-      println(this.value)
-      rightSubTree.inOrder()
-    }
-  }
-
   def preOrder(): Unit = this match {
     case BinaryTree(value, None, None) => {
       println(this.value)
@@ -69,11 +50,36 @@
     }
   }
 
+  def callInOrder(f: (T, Int) => Unit, depth: Int = 0) : Unit = this match {
+    case BinaryTree(value, None, None) => {
+      f(this.value, depth)
+    }
+    case BinaryTree(value, Some(leftSubTree), None) => {
+      leftSubTree.callInOrder(f, depth + 1)
+      f(this.value, depth)
+    }
+    case BinaryTree(value, None, Some(rightSubTree)) => {
+      f(this.value, depth)
+      rightSubTree.callInOrder(f, depth + 1)
+    }
+    case BinaryTree(value, Some(leftSubTree), Some(rightSubTree)) => {
+      leftSubTree.callInOrder(f, depth + 1)
+      f(this.value, depth)
+      rightSubTree.callInOrder(f, depth + 1)
+    }
+  }
+
+  def printTree(): Unit = {
+    val printNode = (value: T, depth: Int) => print(" " * 5 * depth  + value + '\n')
+    callInOrder(printNode)
+  }
+
+  def inOrder():Unit = {
+    val printNode = (value: T, depth: Int) => println(value)
+    callInOrder(printNode)
+  }
 }
   object BinaryTree{
     def unapply[T](tree: BinaryTree[T]): Option[(T, Option[BinaryTree[T]], Option[BinaryTree[T]])] =
       Some((tree.value, tree.left, tree.right))
   }
-
-//Case classes are regular classes which export their constructor parameters and which
-// provide a recursive decomposition mechanism via pattern matching.

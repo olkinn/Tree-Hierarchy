@@ -4,6 +4,7 @@
 
 object Main {
   def main (arg: Array[String]){
+
     val binaryTree = new BinaryTree[String]("String one", None, None)
     val newBinaryTree = binaryTree.add("test").add("lalala").add("alalal")
 
@@ -32,5 +33,7 @@ object Main {
     newRBTree.search(10)
     println()
     println(newRBTree)
+
+    newRBTree.printTree()
   }
 }
